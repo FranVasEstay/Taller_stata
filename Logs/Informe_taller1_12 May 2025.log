@@ -1,0 +1,160 @@
+------------------------------------------------------------------
+      name:  <unnamed>
+       log:  C:/Users/Kibif/Desktop/Master en Salud Pública/1°Seme
+> stre/Bioestadística/Talleres/Taller grupal/Taller_stata/Logs/Inf
+> orme_taller1_12 May 2025.log
+  log type:  text
+ opened on:  12 May 2025, 20:23:44
+
+. 
+. *******************************************************
+. * 3. CARGA DE DATOS *
+. *******************************************************
+. * Define rutas y nombres de archivos usados
+. global input_csv "$data_dir/Serie_Nacimientos_2020_2022.csv" // 
+> CSV de entrada
+
+. global base_original "$data_dir/Base_original.dta" // Base origi
+> nal guardada en formato .dta
+
+. global base_modificada"$data_dir/Data_taller1.dta" // Base para 
+> análisis
+
+. 
+. * Importa el archivo CSV y lo carga a memoria
+. import delimited "$input_csv", clear
+(encoding automatically selected: ISO-8859-1)
+(25 vars, 561,554 obs)
+
+. 
+. * Guarda la base cargada en formato nativo de Stata (.dta)
+. save "$base_original", replace
+file C:/Users/Kibif/Desktop/Master en Salud
+    Pública/1°Semestre/Bioestadística/Talleres/Taller
+    grupal/Taller_stata/Data/Base_original.dta saved
+
+. 
+end of do-file
+
+. do "C:\Users\Kibif\AppData\Local\Temp\STD3f34_000000.tmp"
+
+. 
+. *******************************************************
+. * 4. ANÁLISIS EXPLORATORIO INICIAL *
+. *******************************************************
+. * Abre la base para verla manualmente (opcional)
+. br
+
+. * Describe todas las variables: tipo, nombre, etiqueta y almacen
+> amiento
+. describe
+
+Contains data from C:/Users/Kibif/Desktop/Master en Salud Pública/
+> 1°Semestre/Bioestadística/Talleres/Taller grupal/Taller_stata/Da
+> ta/Base_original.dta
+ Observations:       561,554                  
+    Variables:            25                  12 May 2025 20:23
+------------------------------------------------------------------
+Variable      Storage   Display    Value
+    name         type    format    label      Variable label
+------------------------------------------------------------------
+mes_nac         byte    %8.0g                 MES_NAC
+ano_nac         int     %8.0g                 ANO_NAC
+sexo            byte    %8.0g                 SEXO
+tipo_parto      byte    %8.0g                 TIPO_PARTO
+tipo_aten       byte    %8.0g                 TIPO_ATEN
+parto_local     byte    %8.0g                 PARTO_LOCAL
+semanas         byte    %8.0g                 SEMANAS
+rango_peso      str11   %11s                  RANGO_PESO
+talla           byte    %8.0g                 TALLA
+grupo_eta~padre str16   %16s                  GRUPO_ETARIO_PADRE
+curso_padre     byte    %8.0g                 CURSO_PADRE
+nivel_padre     byte    %8.0g                 NIVEL_PADRE
+activ_padre     byte    %8.0g                 ACTIV_PADRE
+ocupa_padre     str1    %9s                   OCUPA_PADRE
+categ_padre     byte    %8.0g                 CATEG_PADRE
+grupo_eta~madre str15   %15s                  GRUPO_ETARIO_MADRE
+est_civ_madre   byte    %8.0g                 EST_CIV_MADRE
+curso_madre     byte    %8.0g                 CURSO_MADRE
+nivel_madre     byte    %8.0g                 NIVEL_MADRE
+activ_madre     byte    %8.0g                 ACTIV_MADRE
+ocupa_madre     str1    %9s                   OCUPA_MADRE
+categ_madre     byte    %8.0g                 CATEG_MADRE
+nacionalidad_~e str1    %9s                   NACIONALIDAD_MADRE
+region_reside~a byte    %8.0g                 REGION_RESIDENCIA
+glosa_region_~a str41   %41s                  GLOSA_REGION_RESIDEN
+                                              > CIA
+------------------------------------------------------------------
+Sorted by: 
+
+. 
+. * Muestra sólo la región de O'higgins (región de interés)
+. br if region_residencia == 6
+
+. 
+. * Nos quedamos sólo con los datos de la región que nos tocó
+. keep if region_residencia == 6
+(531,979 observations deleted)
+
+. * Vemos de nuevo nuestra base pa cachar si salió todo bien
+. br
+
+. describe
+
+Contains data from C:/Users/Kibif/Desktop/Master en Salud Pública/
+> 1°Semestre/Bioestadística/Talleres/Taller grupal/Taller_stata/Da
+> ta/Base_original.dta
+ Observations:        29,575                  
+    Variables:            25                  12 May 2025 20:23
+------------------------------------------------------------------
+Variable      Storage   Display    Value
+    name         type    format    label      Variable label
+------------------------------------------------------------------
+mes_nac         byte    %8.0g                 MES_NAC
+ano_nac         int     %8.0g                 ANO_NAC
+sexo            byte    %8.0g                 SEXO
+tipo_parto      byte    %8.0g                 TIPO_PARTO
+tipo_aten       byte    %8.0g                 TIPO_ATEN
+parto_local     byte    %8.0g                 PARTO_LOCAL
+semanas         byte    %8.0g                 SEMANAS
+rango_peso      str11   %11s                  RANGO_PESO
+talla           byte    %8.0g                 TALLA
+grupo_eta~padre str16   %16s                  GRUPO_ETARIO_PADRE
+curso_padre     byte    %8.0g                 CURSO_PADRE
+nivel_padre     byte    %8.0g                 NIVEL_PADRE
+activ_padre     byte    %8.0g                 ACTIV_PADRE
+ocupa_padre     str1    %9s                   OCUPA_PADRE
+categ_padre     byte    %8.0g                 CATEG_PADRE
+grupo_eta~madre str15   %15s                  GRUPO_ETARIO_MADRE
+est_civ_madre   byte    %8.0g                 EST_CIV_MADRE
+curso_madre     byte    %8.0g                 CURSO_MADRE
+nivel_madre     byte    %8.0g                 NIVEL_MADRE
+activ_madre     byte    %8.0g                 ACTIV_MADRE
+ocupa_madre     str1    %9s                   OCUPA_MADRE
+categ_madre     byte    %8.0g                 CATEG_MADRE
+nacionalidad_~e str1    %9s                   NACIONALIDAD_MADRE
+region_reside~a byte    %8.0g                 REGION_RESIDENCIA
+glosa_region_~a str41   %41s                  GLOSA_REGION_RESIDEN
+                                              > CIA
+------------------------------------------------------------------
+Sorted by: 
+     Note: Dataset has changed since last saved.
+
+. 
+end of do-file
+
+. do "C:\Users\Kibif\AppData\Local\Temp\STD3f34_000000.tmp"
+
+. * Guarda la base modificada para continuar el análisis
+. save "$base_modificada", replace
+(file C:/Users/Kibif/Desktop/Master en Salud
+    Pública/1°Semestre/Bioestadística/Talleres/Taller
+    grupal/Taller_stata/Data/Data_taller1.dta not found)
+file C:/Users/Kibif/Desktop/Master en Salud
+    Pública/1°Semestre/Bioestadística/Talleres/Taller
+    grupal/Taller_stata/Data/Data_taller1.dta saved
+
+. 
+end of do-file
+
+. exit, clear
